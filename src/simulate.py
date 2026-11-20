@@ -18,13 +18,19 @@ SEED = 0
 
 def simulate_chain(P=P_TRUE, T=20_000, seed=SEED):
     """One path X_0, ..., X_{T-1} with X_0 = 0 (exactly the handout's code).
-    Returns (x, P_true)."""
+    Returns x, so the handout's starter code  x = simulate_chain(P_true, T=20000, seed=0)  runs as is."""
     rng = np.random.default_rng(seed)
     k = P.shape[0]
     x = np.zeros(T, dtype=int)
     for t in range(1, T):
         x[t] = rng.choice(k, p=P[x[t - 1]])
-    return x, P
+    return x
+
+
+def simulate_markov(T=20_000, seed=SEED):
+    """The Iteration 2 simulation as one function of the sample size and the seed:
+    returns the data together with the true parameters, (x, P_true)."""
+    return simulate_chain(P_TRUE, T=T, seed=seed), P_TRUE
 
 
 def absorbing_matrix(P=P_TRUE, p_out=P_OUT):
@@ -94,7 +100,7 @@ def simulate_second_order(T=20_000, stick=0.8, P=P_TRUE, seed=SEED):
 def iteration2_check():
     from report_utils import Macros, tex_num, tex_table, write_tex
 
-    x, P = simulate_chain(T=20_000, seed=SEED)
+    x, P = simulate_markov(T=20_000, seed=SEED)
     k, T = 3, len(x)
     n = np.zeros((k, k))
     np.add.at(n, (x[:-1], x[1:]), 1)

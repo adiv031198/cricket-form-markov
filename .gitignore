@@ -9,3 +9,4 @@ docs/report/*.out
 docs/report/*.toc
 .venv/
 .DS_Store
+docs/report/

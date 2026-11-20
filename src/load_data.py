@@ -128,6 +128,22 @@ def innings_level(apps, min_innings=MIN_INNINGS, season_range=None, pool=None):
     return top, dict(chains), log
 
 
+def drop_events(apps, top):
+    """A8 check. For every innings followed by D (not in the team's next match g+1), record its state
+    and whether the batter is back in the team at match g+2 (missed exactly one match), so that
+    one-match absences (rest, minor injury) can be told apart from longer drops."""
+    selected = set(zip(apps.player_id, apps.season, apps.team, apps.game_no))
+    last_game = apps.groupby(["season", "team"]).game_no.max().to_dict()
+    out = []
+    for r in top.itertuples():
+        g, key = r.game_no, (r.season, r.team)
+        if g + 1 > last_game[key] or (r.player_id, r.season, r.team, g + 1) in selected:
+            continue
+        back_next = g + 2 <= last_game[key] and (r.player_id, r.season, r.team, g + 2) in selected
+        out.append((int(r.state), bool(back_next)))
+    return out
+
+
 def ball_state(runs):
     return {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 4, 6: 5}.get(runs, 4 if runs < 6 else 5)
 

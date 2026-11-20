@@ -13,7 +13,9 @@ We model IPL batting as a Markov chain at two scales:
 ```
 src/        all code (imports: numpy, pandas, matplotlib, scipy.stats + standard library)
   load_data.py         Iteration 2: load the Cricsheet zip, build both chains, describe the data
-  simulate.py          simulated data with known truth; run it for the Iteration 2 simulation check
+  simulate.py          simulated data with known truth: simulate_markov(T, seed) -> (x, P),
+                       simulate_chain(P, T, seed) -> x (as in the handout), simulate_absorbing(n_paths, seed);
+                       run it for the Iteration 2 simulation check
   methods.py           Iteration 3: from-scratch functions (my_*), one per algorithm step
   small_example.py     Iteration 3: the tiny worked example, step by step, in exact fractions
   check_simulation.py  Iteration 3: recover the truth, compare with numpy, error vs T, stress test
@@ -37,8 +39,8 @@ docs/       report PDFs, the Overleaf source (docs/report/) and the Excel plan
 | 1 | `python src/load_data.py` | Data description and the two data figures (Iteration 2) |
 | 2 | `python src/simulate.py` | Iteration 2 simulation check (P-hat, pi, n-step, absorption) |
 | 3 | `python src/small_example.py` | Tiny example, every intermediate matrix and row operation printed |
-| 4 | `python src/check_simulation.py` | Simulation test: truth, library, error vs T, stress test, assumption checks |
-| 5 | `python src/run_real.py` | Real data, library comparison, assumption checks, verification table |
+| 4 | `python src/check_simulation.py` | Handout starter code, simulation test (truth, library, error vs T, stress test), assumption checks A1–A7 |
+| 5 | `python src/run_real.py` | Real data, library comparison, assumption checks A1–A8, verification table |
 
 Every number and table in the report is written by these scripts to `docs/report/generated/`, and every figure
 to `figures/` (copy it to `docs/report/figures/` before compiling). Run them in the order above, because
